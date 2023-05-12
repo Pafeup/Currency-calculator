@@ -1,50 +1,57 @@
-let form = document.querySelector(".js-form");
-let baseValueElement = document.querySelector(".js-baseValue");
-let currencyElement = document.querySelector(".js-selectCurrency");
-let resultElement = document.querySelector(".js-result");
+{
+    const calculateResolut = (baseValue, selectedCurrency) => {
+        const EUR = 4.69;
+        const USD = 4.39;
+        const GBP = 5.28;
+        const CHF = 4.71;
+        const JPY = 0.032;
 
-let EUR = 4.69;
-let USD = 4.39;
-let GBP = 5.28;
-let CHF = 4.71;
-let JPY = 0.032;
+        switch (selectedCurrency) {
+            case "EUR":
+                currencyMark = "€";
+                return baseValue / EUR;
 
-form.addEventListener("input", () => {
+            case "USD":
+                currencyMark = "$";
+                return baseValue / USD;
 
-    let baseValue = +(baseValueElement.value);
-    let selectedCurrency = currencyElement.value;
-    let result 
-    // = resultElement.value;
+            case "GBP":
+                currencyMark = "£";
+                return baseValue / GBP;
 
-    let currencyMark;
+            case "CHF":
+                currencyMark = "₣";
+                return baseValue / CHF;
 
-    switch (selectedCurrency) {
-        case "EUR":
-            result = baseValue / EUR;
-            currencyMark = "€";
-            break;
-        case "USD":
-            result = baseValue / USD;
-            currencyMark = "$";
-            break;
-        case "GBP":
-            result = baseValue / GBP;
-            currencyMark = "£";
-            break;
-        case "CHF":
-            result = baseValue / CHF;
-            currencyMark = "₣";
-            break;
-        case "JPY":
-            result = baseValue / JPY;
-            currencyMark = "¥";
-            break;
-    }
+            case "JPY":
+                currencyMark = "¥";
+                return baseValue / JPY;
+        }
+    };
 
-    resultElement.innerText = `${baseValue.toFixed(2)} PLN = ${result.toFixed(2)} ${currencyMark}`;
+    const updateResultText = (baseValueElement, baseValue, result) => {
+        const resultElement = document.querySelector(".js-result");
 
-    // if (baseValueElement.value == "") {
-    //     resultElement.innerText = "0.00 PLN = 0.00 " + currencyMark;
-    // }
-    resultElement.innerText = baseValueElement.value == "" ? `0.00 PLN = 0.00 ${currencyMark}` : `${baseValue.toFixed(2)} PLN = ${result.toFixed(2)} ${currencyMark}`;
-})
+        resultElement.innerText = baseValueElement.value == "" ? `0.00 zł = 0.00 ${currencyMark}` : `${baseValue.toFixed(2)} zł = ${result.toFixed(2)} ${currencyMark}`;
+    };
+
+    const onFormSubmit = () => {
+        const baseValueElement = document.querySelector(".js-baseValue");
+        const currencyElement = document.querySelector(".js-selectCurrency");
+
+        const baseValue = +(baseValueElement.value);
+        const selectedCurrency = currencyElement.value;
+
+        const result = calculateResolut(baseValue, selectedCurrency);
+
+        updateResultText(baseValueElement, baseValue, result);
+    };
+
+    const init = () => {
+        const form = document.querySelector(".js-form");
+
+        form.addEventListener("input", onFormSubmit);
+    };
+
+    init();
+}
